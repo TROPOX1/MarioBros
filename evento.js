@@ -19,7 +19,9 @@ const evento = (() => {
     
     // Estados del teclado
     const teclas = {
-        espacio: false
+        espacio: false,
+        izquierda: false,
+        derecha: false
     };
     
     /**
@@ -50,6 +52,8 @@ const evento = (() => {
         juegoIniciado = false;
         tiempoInicio = 0;
         saltoPresionado = false;
+        teclas.izquierda = false;
+        teclas.derecha = false;
         
         console.log('🔄 Juego reiniciado');
         
@@ -70,14 +74,23 @@ const evento = (() => {
     });
     
     /**
-     * Capturar evento de teclado (Barra Espaciadora)
+     * Capturar evento de teclado
      */
     document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && juegoIniciado) {
-            e.preventDefault();
-            if (!saltoPresionado) {
-                saltoPresionado = true;
-                console.log('⬆️ Salto detectado');
+        if (juegoIniciado) {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (!saltoPresionado) {
+                    saltoPresionado = true;
+                }
+            }
+            if (e.code === 'ArrowLeft') {
+                e.preventDefault();
+                teclas.izquierda = true;
+            }
+            if (e.code === 'ArrowRight') {
+                e.preventDefault();
+                teclas.derecha = true;
             }
         }
     });
@@ -85,6 +98,12 @@ const evento = (() => {
     document.addEventListener('keyup', (e) => {
         if (e.code === 'Space') {
             saltoPresionado = false;
+        }
+        if (e.code === 'ArrowLeft') {
+            teclas.izquierda = false;
+        }
+        if (e.code === 'ArrowRight') {
+            teclas.derecha = false;
         }
     });
     
@@ -95,6 +114,12 @@ const evento = (() => {
         },
         obtener_salto: function() {
             return saltoPresionado;
+        },
+        obtener_izquierda: function() {
+            return teclas.izquierda;
+        },
+        obtener_derecha: function() {
+            return teclas.derecha;
         },
         obtener_tiempo_inicio: function() {
             return tiempoInicio;
